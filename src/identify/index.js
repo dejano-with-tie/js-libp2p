@@ -189,7 +189,6 @@ class IdentifyService {
       const envelope = await Envelope.openAndCertify(signedPeerRecord, PeerRecord.DOMAIN)
       if (this.peerStore.addressBook.consumePeerRecord(envelope)) {
         this.peerStore.protoBook.set(id, protocols)
-        return
       }
     } catch (err) {
       log('received invalid envelope, discard it and fallback to listenAddrs is available', err)
@@ -207,7 +206,9 @@ class IdentifyService {
 
     // TODO: Add and score our observed addr
     log('received observed address of %s', cleanObservedAddr)
-    // this.addressManager.addObservedAddr(observedAddr)
+    if (cleanObservedAddr !== null) {
+      this.addressManager.addObservedAddr(cleanObservedAddr);
+    }
   }
 
   /**
